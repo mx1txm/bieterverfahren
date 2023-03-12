@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load tailwind_tags %}
+<html>
+<head>
+  {% tailwind_css %}
+  <link rel="stylesheet" type="text/css" href="/css/base.css">
+  <title>Home</title>
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="header">
+      <div class="navbar-nav">
+                <a class="nav-item nav-link" href="#">New Post</a>
+                <a class="nav-item nav-link" href="#">Profile</a>
+                <a class="nav-item nav-link" href="#">Logout</a>
+
+                <a class="nav-item nav-link" href="#">Login</a>
+                <a class="nav-item nav-link" href="#">Register</a>
+      </div>
+    </div>
+
+    <footer>
+      <a>About</a>
+      <a>FAQ</a>
+      <a>Terms & Conditions</a>
+      <a>Privacy Policy</a>
+    </footer>
+
+  </div>
+</body>
+</html>

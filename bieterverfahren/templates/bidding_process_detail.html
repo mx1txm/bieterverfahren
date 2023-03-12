@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="bids" hx-get="{% url 'bidding_process_detail' bidding_process_id=bidding_process.id %}" hx-target="#bids">
+  {% for bid in bids %}
+    <p>{{ bid.pseudonymized_bid }}</p>
+  {% empty %}
+    <p>No bids yet.</p>
+  {% endfor %}
+</div>
+<form method="post" hx-post="{% url 'bidding_process_detail' bidding_process_id=bidding_process.id %}" hx-target="#bids">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="bid_amount">Bid Amount</label>
+    <input type="text" class="form-control" id="bid_amount" name="bid_amount" required>
+  </div>
+  <div class="form-group">
+    <label for="bidder_name">Bidder Name</label>
+    <input type="text" class="form-control" id="bidder_name" name="bidder_name" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Place Bid</button>
+</form>
+
+
+
+
+  <h1>{{ property.address }}</h1>
+  <p>{{ property.description }}</p>
+
+  <h2>{{ bidding_process.start_time }} - {{ bidding_process.end_time }}</h2>
+  <p>{{ bidding_process.description }}</p>
+
+  <h3>{{ _('Last bids') }}</h3>
+  <ul>
+    {% for bid in bids %}
+      <li>{{ bid.pseudonymized_bid }}</li>
+    {% empty %}
+      <li>{{ _('No bids yet') }}</li>
+    {% endfor %}
+  </ul>
+
+  {% if bidding_process.is_open() %}
+    <h3>{{ _('Place a bid') }}</h3>
+    <form method="post">
+      {% csrf_token %}
+      <label for="bid_amount">{{ _('Bid amount') }}</label>
+      <input type="number" name="bid_amount" step="0.01" required>
+      <br>
+      <label for="bidder_name">{{ _('Bidder name') }}</label>
+      <input type="text" name="bidder_name" required>
+      <br>
+      <button type="submit">{{ _('Place bid') }}</button>
+    </form>
+  {% else %}
+    <p>{{ _('The bidding process is closed.') }}</p>
+  {% endif %}
+</body>
+</html>
