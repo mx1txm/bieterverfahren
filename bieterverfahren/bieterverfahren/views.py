@@ -6,6 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 
+def landingpage(request):
+    properties = Property.objects.all()
+    context = {
+        'property_list': properties,
+    }
+    return render(request, 'landingpage.html', context)
+
+
 def bidding_process_detail(request, bidding_process_id):
     bidding_process = get_object_or_404(BiddingProcess, id=bidding_process_id)
     property = bidding_process.property
@@ -45,7 +53,7 @@ def bidders_list(request, property_id):
 
     # Check if the current user is the seller of the property
     if request.user != property.seller:
-        return render(request, 'permission_denied.html')
+       return render(request, 'permission_denied.html')
 
     # Get all the bids for the property
     bids = Bid.objects.filter(bidding_process__property=property).order_by('-amount')

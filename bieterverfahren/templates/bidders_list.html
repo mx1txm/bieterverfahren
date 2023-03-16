@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
 </head>
-<body>
-{% extends 'base.html' %}
-
-{% block content %}
-  <h1>Bidders for "{{ property.name }}"</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Bidder Name</th>
-        <th>Bid Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for bid in bids %}
-        <tr>
-          <td>{{ bid.bidder_name }}</td>
-          <td>{{ bid.amount }}</td>
-        </tr>
-      {% empty %}
-        <tr>
-          <td colspan="2">No bids have been placed on this property yet.</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endblock %}
-
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-4">Bidders for "{{ property.name }}"</h1>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2 text-left">Bidder Name</th>
+                        <th class="px-4 py-2 text-left">Bid Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in bids %}
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2">{{ bid.bidder_name }}</td>
+                            <td class="border px-4 py-2">{{ bid.amount }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2 text-center" colspan="2">No bids have been placed on this property yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

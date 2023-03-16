@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Seller, Property, BiddingProcess, Bid
 
 
+
 class PropertyInline(admin.TabularInline):
     model = Property
     extra = 1
@@ -15,6 +16,8 @@ class PropertyInline(admin.TabularInline):
 @admin.register(Seller)
 class SellerAdmin(admin.ModelAdmin):
     inlines = [PropertyInline]
+    list_display = ('name', 'email', 'phone')
+    #ordering = ('name',)
 
 
 @admin.register(Property)
@@ -29,7 +32,7 @@ class BiddingProcessAdmin(admin.ModelAdmin):
     list_filter = ('property__seller', 'start_time', 'end_time')
     readonly_fields = ('current_highest_bid',)
     fieldsets = (
-        (None, {
+        ('', {
             'fields': ('property', 'start_time', 'end_time', 'starting_price', 'minimum_increment')
         }),
         (_('Extension Time'), {
@@ -46,21 +49,35 @@ class BiddingProcessAdmin(admin.ModelAdmin):
         }),
     )
 
+    #def save_model(self, request, obj, form, change):
+     #   if not change:
+      #      obj.save()
+       #     self.invite_bidders(request, obj)
+        #else:
+         #   obj.save()
+
     def save_model(self, request, obj, form, change):
-        if not change:
-            obj.save()
+        is_new_instance = not change
+        super().save_model(request, obj, form, change)
+
+        print("Save model called:", is_new_instance, obj)  # Add this line
+
+        if is_new_instance:
             self.invite_bidders(request, obj)
-        else:
-            obj.save()
 
     def invite_bidders(self, request, bidding_process):
+        print("Invite bidders called:", bidding_process)  # Add this line
+        print("Invited bidders:", bidding_process.invited_bidders)  # Add this line
+
         subject = _('Invitation to bid')
         from_email = 'example@example.com'
         template_name = 'email/bidding_process_invitation.html'
 
-        for bidder_email in bidding_process.invited_bidders.split(','):
+        for bidder_email in (bidding_process.invited_bidders or "").split(','):
             bidder_email = bidder_email.strip()
+            print("Bidder email:", bidder_email)  # Add this line
             if bidder_email:
+
                 context = {
                     'seller_name': bidding_process.property.seller.name,
                     'property_address': bidding_process.property.address,
@@ -82,10 +99,19 @@ class BiddingProcessAdmin(admin.ModelAdmin):
     current_highest_bid.short_description = _('Current highest bid')
 
     def get_form(self, request, obj=None, **kwargs):
+        print("get_form called:", request, obj, kwargs)  # Add this line
         form = super().get_form(request, obj, **kwargs)
+        print("Form before modification:", form)  # Add this line
         if not obj:
             form.base_fields['invited_bidders'].help_text = _('Enter a comma-separated list of email addresses.')
+        print("Form after modification:", form)  # Add this line
         return form
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = super().get_readonly_fields(request, obj)
+        if readonly_fields is None:
+            return []
+        return readonly_fields
+
+    #def get_readonly_fields(self, request, obj=None):
+     #   readonly_fields = super().get_readonly_fields(request, obj)

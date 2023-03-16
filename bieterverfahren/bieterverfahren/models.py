@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -29,6 +31,7 @@ class BiddingProcess(models.Model):
     minimum_increment = models.DecimalField(max_digits=10, decimal_places=2)
     duration_extension_time = models.DurationField(default='0h:10m', help_text=_('Duration extends 10 minutes'))
     # Duration to extend the bidding process when a bid is placed less than 10 minutes before the end.
+    invited_bidders = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'Bidding process for {self.property}'

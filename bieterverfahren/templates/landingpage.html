@@ -38,6 +38,46 @@
     </div>
   </section>
 
+  <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-4">Property "{{ property.name }}"</h1>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2 text-left">Bidder Name</th>
+                        <th class="px-4 py-2 text-left">Bid Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in bids %}
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2">{{ bid.bidder_name }}</td>
+                            <td class="border px-4 py-2">{{ bid.amount }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2 text-center" colspan="2">No bids have been placed on this property yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  {% block content %}
+
+    {% for property in property_list %}
+      <div class="angebot">
+          <div class="column1">
+            <img src="{{ property.photo.url }}" width="200px"></p>
+            <small class="text-muted">{{ property.address }}</small>
+            <small>,</small>
+            <small class="text-muted">{{ property.description }}</small>
+          </div>
+      </div>
+    {% endfor %}
+    {% endblock content %}
+
   <!-- Properties Section -->
   <section class="bg-white py-16">
     <div class="container mx-auto px-4">
