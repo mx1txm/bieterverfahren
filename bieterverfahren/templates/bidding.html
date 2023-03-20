@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bidding Process</title>
+    <script src="https://unpkg.com/htmx.org@1.7.1"></script>
+    <!-- Include other styles or scripts as needed -->
 </head>
 <body>
-
+    <!-- Your bidding process content here -->
+    <form hx-post="{% url 'place_bid' %}" hx-target="#bids_list" hx-swap="outerHTML">
+    <!-- Your bidding form elements, such as input fields and buttons -->
+    </form>
 </body>
 </html>

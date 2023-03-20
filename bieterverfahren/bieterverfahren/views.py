@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import BiddingProcess, Bid, Property
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.core.mail import send_mail
 
 
 def landingpage(request):
@@ -12,6 +13,14 @@ def landingpage(request):
         'property_list': properties,
     }
     return render(request, 'landingpage.html', context)
+
+
+def send_invitation_email(bidding_process, recipient_email):
+    subject = 'Invitation to participate in a bidding process'
+    message = f'You have been invited to participate in the bidding process for {bidding_process.property}. The bidding process starts at {bidding_process.start_date} and ends at {bidding_process.end_date}. Please follow this link to place your bid: <link to your bidding page>'
+    from_email = 'your-email@example.com'
+
+    send_mail(subject, message, from_email, [recipient_email], fail_silently=False)
 
 
 def bidding_process_detail(request, bidding_process_id):
